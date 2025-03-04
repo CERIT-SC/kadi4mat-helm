@@ -1,0 +1,11 @@
+AUTH_PROVIDERS = [{"type": "local"}]
+SERVER_NAME = "127.0.0.1"
+SECRET_KEY = "kadi"
+SQLALCHEMY_DATABASE_URI = "postgresql://kadi:kadi@postgres/kadi"
+STORAGE_PATH = "/opt/kadi/storage"
+MISC_UPLOADS_PATH = "/opt/kadi/uploads"
+SMTP_HOST = "localhost"
+SMTP_PORT = 25
+SMTP_USERNAME = ""
+SMTP_PASSWORD = ""
+MAIL_NO_REPLY = "no-reply@127.0.0.1"
