@@ -25,17 +25,14 @@ RUN adduser kadi --system --group --home /opt/kadi --shell /bin/bash \
 && usermod -a -G kadi www-data
 
 
-COPY ./kadi/ ./kadi_repo/
-RUN pip install ./kadi_repo/
-
+RUN pip install kadi
 
 # Kadi config --------
 
 # TODO change to generating during build from args
 COPY kadi.py /tmp/kadi.py
 RUN KADI_CONFIG_FILE=${KADI_HOME}/config/kadi.py && mkdir ${KADI_HOME}/config \
-&& mv /tmp/kadi.py ${KADI_HOME}/config/kadi.py && chmod 666 ${KADI_HOME}/config/kadi.py
-
+&& mv /tmp/kadi.py ${KADI_HOME}/config/kadi.py && chown kadi ${KADI_HOME}/config/kadi.py
 
 # uWSGI -------------
 ENV UWSGI_CONFIG_FILE="/etc/kadi-uwsgi.ini"
@@ -43,14 +40,6 @@ ENV UWSGI_CONFIG_FILE="/etc/kadi-uwsgi.ini"
 RUN kadi utils uwsgi --default --out ${KADI_HOME}/kadi-uwsgi.ini \
   && mv ${KADI_HOME}/kadi-uwsgi.ini /etc/ \
   && chown root:root ${UWSGI_CONFIG_FILE}
-
-RUN kadi utils uwsgi-service --default --out ${KADI_HOME}/kadi-uwsgi.service \
-  && mv ${KADI_HOME}/kadi-uwsgi.service /etc/systemd/system/ \
-  && chown root:root /etc/systemd/system/kadi-uwsgi.service
-
-RUN echo -e "/var/log/uwsgi/*.log {\n  copytruncate\n  compress\n  delaycompress\n  missingok\n  notifempty\n  rotate 10\n  weekly\n}" \
-> /etc/logrotate.d/uwsgi
-
 
 # Apache ----------
 RUN openssl req -x509 -nodes -days 365 -newkey rsa:4096 -keyout ${KEY_FILE} -out ${CERT_FILE} \
@@ -60,15 +49,17 @@ RUN yes y | kadi utils apache --default --out ${KADI_HOME}/kadi.conf \
     && mv ${KADI_HOME}/kadi.conf /etc/apache2/sites-available/ \
     && chown root:root ${APACHE_CONFIG_FILE}
 
-RUN service apache2 start
-
 RUN a2dissite 000-default \
     && a2ensite kadi \
     && a2enmod deflate headers http2 proxy_uwsgi socache_shmcb ssl xsendfile
 
-RUN mkdir /var/log/uwsgi/ && touch /var/log/uwsgi/kadi-uwsgi.log
+# Create log and run folders
+RUN mkdir /var/log/uwsgi && chown kadi /var/log/uwsgi \
+&& mkdir /var/log/celery /run/celery && chown kadi /var/log/celery /run/celery 
+
+# Set logrotate for uwsgi an celery
+RUN echo -e "/var/log/uwsgi/*.log {\n  copytruncate\n  compress\n  delaycompress\n  missingok\n  notifempty\n  rotate 10\n  weekly\n}" > /etc/logrotate.d/uwsgi \
+&& echo -e "/var/log/celery/*.log {\n  copytruncate\n  compress\n  delaycompress\n  missingok\n  notifempty\n  rotate 10\n  weekly\n}" > /etc/logrotate.d/celery
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT ["/docker-entrypoint.sh"]
-
-## TODO add celery config

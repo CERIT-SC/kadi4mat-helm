@@ -9,3 +9,6 @@ SMTP_PORT = 25
 SMTP_USERNAME = ""
 SMTP_PASSWORD = ""
 MAIL_NO_REPLY = "no-reply@127.0.0.1"
+ELASTICSEARCH_HOSTS = "http://elasticsearch:9200"
+RATELIMIT_STORAGE_URI = "redis://redis:6379/0"
+CELERY_BROKER_URL = "redis://redis:6379/0"
