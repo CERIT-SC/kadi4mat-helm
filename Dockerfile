@@ -31,4 +31,7 @@ RUN a2dissite 000-default \
 RUN mkdir /var/log/celery /run/celery && chown kadi /var/log/celery /run/celery
 
 COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+
+RUN chmod +x /docker-entrypoint.sh
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
