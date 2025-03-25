@@ -7,9 +7,11 @@ services:
             - elasticsearch
         ports:
             - 80:80
-            - 443:443
         volumes:
-            - kadi:/opt/kadi/
+            - kadi-config:/opt/kadi/config/
+            - kadi-apache-config:/etc/apache2/sites-available/
+            - kadi-storage:/opt/kadi/storage
+            - kadi-uploads:/opt/kadi/uploads
     postgres:
         image: postgres:17
         ports:
@@ -44,3 +46,7 @@ volumes:
     redis:
     elasticsearch:
     kadi:
+    kadi-config:
+    kadi-apache-config:
+    kadi-storage:
+    kadi-uploads:
