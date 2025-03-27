@@ -1,6 +1,9 @@
 FROM python:3.13.2-bookworm
 
 ENV PYTHON_INTERPRETER=${1:-python3}
+ENV PIP_TARGET="/usr/local/lib/python/site-packages"
+ENV PYTHONPATH="${PIP_TARGET}"
+ENV PATH="${PATH}:${PIP_TARGET}/bin"
 
 ENV KADI_USER="kadi"
 ENV KADI_GROUP="kadi"
