@@ -1,9 +1,5 @@
 #!/bin/bash
 
-[ ! -f "${KADI_HOME}/config/kadi.py" ] && cp /default-config/kadi.py ${KADI_HOME}/config/kadi.py
-[ ! -f "${KADI_HOME}/kadi-uwsgi.ini" ] && cp /default-config/kadi-uwsgi.ini ${KADI_HOME}/kadi-uwsgi.ini
-[ ! -f "/etc/apache2/sites-available/kadi.conf" ] && cp /default-config/kadi-apache.conf /etc/apache2/sites-enabled/kadi.conf
-
 kadi db init
 sh -c "sleep 30 && kadi search init" &
 

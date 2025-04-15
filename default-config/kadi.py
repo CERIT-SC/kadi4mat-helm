@@ -1,5 +1,5 @@
 AUTH_PROVIDERS = [{"type": "local"}]
-SERVER_NAME = "localhost"
+SERVER_NAME = "localhost:8080"
 SECRET_KEY = "kadi"
 SQLALCHEMY_DATABASE_URI = "postgresql://kadi:kadi@postgres/kadi"
 STORAGE_PATH = "/opt/kadi/storage"

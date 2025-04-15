@@ -23,13 +23,16 @@ RUN adduser kadi --system --group --home /opt/kadi --shell /bin/bash
 # Install kadi package
 RUN pip install kadi
 
-COPY ./default-config/ /default-config/
+# Copy defaullt configs
+COPY ./default-config/kadi.py "${KADI_HOME}/config/kadi.py"
+COPY ./default-config/kadi-uwsgi.ini "${KADI_HOME}/kadi-uwsgi.ini"
+COPY ./default-config/kadi-apache.conf /etc/apache2/sites-enabled/kadi.conf
 
 # Change ownership of necessary directories to non-root user
 RUN mkdir -p /opt/kadi/config /opt/kadi/storage /opt/kadi/uploads \
         /var/run/apache2 /var/lock/apache2 /var/log/apache2 /etc/apache2/sites-enabled/ \
         /var/log/celery /run/celery && \
-    chown -R kadi:kadi /default-config/ /opt/kadi \
+    chown -R kadi:kadi /opt/kadi \
         /var/run/apache2 /var/lock/apache2 /var/log/apache2 /etc/apache2/sites-enabled/ \
         /var/log/celery /run/celery
 
