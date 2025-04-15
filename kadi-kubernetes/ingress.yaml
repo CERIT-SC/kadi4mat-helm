@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: kadi-ingress
+  annotations:
+    kubernetes.io/tls-acme: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - "kadi-docker.dyn.cloud.e-infra.cz"
+      secretName: kadi-docker-dyn-cloud-e-infra-cz-tls
+  rules:
+  - host: "kadi-docker.dyn.cloud.e-infra.cz"
+    http:
+      paths:
+      - backend:
+          service:
+            name: kadi
+            port:
+              number: 80
+        pathType: ImplementationSpecific

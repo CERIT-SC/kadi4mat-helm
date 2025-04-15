@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    io.kompose.service: kadi
+  name: kadi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: kadi
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        io.kompose.service: kadi
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - image: cerit.io/xmalota/kadi-docker:v0.1
+          name: kadi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /opt/kadi/storage
+              name: kadi-storage
+            - mountPath: /opt/kadi/uploads
+              name: kadi-uploads
+      # restartPolicy: Always
+      volumes:
+        - name: kadi-storage
+          persistentVolumeClaim:
+            claimName: kadi-storage
+        - name: kadi-uploads
+          persistentVolumeClaim:
+            claimName: kadi-uploads
