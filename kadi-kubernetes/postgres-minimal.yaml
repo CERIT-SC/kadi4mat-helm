@@ -1,0 +1,31 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: postgres
+spec:
+  instances: 1
+  enableSuperuserAccess: true
+
+  imageName: 'cerit.io/cloudnative-pg/postgresql:15.0'
+
+  primaryUpdateStrategy: unsupervised
+
+  bootstrap:
+   initdb:
+      database: kadi
+      owner: kadi
+      secret:
+        name: kadi-postgres-secret
+
+  resources:
+    requests:
+      memory: "4096Mi"
+      cpu: 500m
+    limits:
+      memory: "4096Mi"
+      cpu: 1
+
+  storage:
+    size: 10Gi
+    storageClass: nfs-csi
+

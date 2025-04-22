@@ -17,7 +17,7 @@ spec:
         io.kompose.service: kadi
     spec:
       securityContext:
-        runAsUser: 1000
+        runAsUser: 100
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault
@@ -37,6 +37,13 @@ spec:
               name: kadi-storage
             - mountPath: /opt/kadi/uploads
               name: kadi-uploads
+            - mountPath: /opt/kadi/config
+              name: kadi-config
+          resources:
+            requests:
+              memory: "4Gi"
+            limits:
+              memory: "4Gi"
       # restartPolicy: Always
       volumes:
         - name: kadi-storage
@@ -45,3 +52,6 @@ spec:
         - name: kadi-uploads
           persistentVolumeClaim:
             claimName: kadi-uploads
+        - name: kadi-config
+          configMap:
+            name: kadi-configmap
