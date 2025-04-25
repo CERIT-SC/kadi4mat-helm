@@ -1,0 +1,2 @@
+image: cerit.io/xmalota/kadi-docker:v0.1
+hostname: "kadi-docker.dyn.cloud.e-infra.cz"
