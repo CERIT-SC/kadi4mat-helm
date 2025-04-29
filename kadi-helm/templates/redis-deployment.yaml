@@ -2,19 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
-    app.kubernetes.io/name: redis
-  name: redis
+    app.kubernetes.io/name: "{{ .Release.Name }}-redis"
+  name: "{{ .Release.Name }}-redis"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app.kubernetes.io/name: redis
+      app.kubernetes.io/name: "{{ .Release.Name }}-redis"
   strategy:
     type: Recreate
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: redis
+        app.kubernetes.io/name: "{{ .Release.Name }}-redis"
     spec:
       securityContext:
         runAsNonRoot: true
@@ -23,7 +23,7 @@ spec:
           type: RuntimeDefault
       containers:
         - image: redis:7
-          name: redis
+          name: "{{ .Release.Name }}-redis"
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
@@ -39,4 +39,4 @@ spec:
       volumes:
         - name: redis
           persistentVolumeClaim:
-            claimName: redis
+            claimName: "{{ .Release.Name }}-redis"

@@ -1,7 +1,7 @@
 apiVersion: postgresql.cnpg.io/v1
 kind: Cluster
 metadata:
-  name: postgres
+  name: "{{ .Release.Name }}-postgres"
 spec:
   instances: 1
   enableSuperuserAccess: true
@@ -15,7 +15,7 @@ spec:
       database: kadi
       owner: kadi
       secret:
-        name: kadi-postgres-secret
+        name: "{{ .Release.Name }}-postgres-secret"
 
   resources:
     requests:

@@ -54,4 +54,4 @@ spec:
             claimName: pvc-{{ .Release.Name }}-uploads
         - name: kadi-config
           configMap:
-            name: kadi-configmap
+            name: "{{ .Release.Name }}-configmap"
