@@ -26,6 +26,6 @@ spec:
       cpu: 1
 
   storage:
-    size: 10Gi
+    size: {{ .Values.database.internalDBSettings.storage.size }}
     storageClass: nfs-csi
 

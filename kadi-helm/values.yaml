@@ -1,14 +1,31 @@
 image: cerit.io/xmalota/kadi-docker:v0.1
 hostname: "kadi-docker.dyn.cloud.e-infra.cz"
 
+kadiFiles:
+  storage:
+    size: 1Gi
+  uploads:
+    size: 1Gi
 
 database:
   internal: true
   internalDBSettings:
     username: kadi
     password: kadi
+    storage:
+      size: 10Gi
   connectionString:
 
 elasticsearch:
   internal: true
+  internalElasticSettings:
+    storage:
+      size: 100Mi
+  connectionString:
+
+redis:
+  internal: true
+  internalRedisSettings:
+    storage:
+      size: 100Mi
   connectionString:

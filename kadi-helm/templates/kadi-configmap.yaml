@@ -15,5 +15,5 @@ data:
     SMTP_USERNAME = ""
     SMTP_PASSWORD = ""
     ELASTICSEARCH_HOSTS = {{ if .Values.elasticsearch.internal }}"http://{{ .Release.Name }}-elasticsearch:9200"{{- else }}{{ .Values.elasticsearch.connectionString | quote }}{{- end }}
-    RATELIMIT_STORAGE_URI = "redis://{{ .Release.Name }}-redis:6379/0"
-    CELERY_BROKER_URL = "redis://{{ .Release.Name }}-redis:6379/0"
+    RATELIMIT_STORAGE_URI = {{ if .Values.redis.internal }}"redis://{{ .Release.Name }}-redis:6379/0"{{- else }}{{ .Values.redis.connectionString | quote }}{{- end }}
+    CELERY_BROKER_URL = {{ if .Values.redis.internal }}"redis://{{ .Release.Name }}-redis:6379/0"{{- else }}{{ .Values.redis.connectionString | quote }}{{- end }}
