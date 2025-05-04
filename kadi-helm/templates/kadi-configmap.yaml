@@ -7,13 +7,13 @@ data:
     AUTH_PROVIDERS = [{"type": "local"}]
     SERVER_NAME = {{ .Values.hostname | quote }}
     SECRET_KEY = "kadi"
-    SQLALCHEMY_DATABASE_URI = {{ if .Values.database.internal }}"postgresql://{{ .Values.database.internalDBSettings.username }}:{{ .Values.database.internalDBSettings.password }}@{{ .Release.Name }}-postgres-rw/kadi"{{- else }}{{ .Values.database.connectionString }}{{- end }}
+    SQLALCHEMY_DATABASE_URI = {{ if .Values.database.internal }}"postgresql://{{ .Values.database.internalDBSettings.username }}:{{ .Values.database.internalDBSettings.password }}@{{ .Release.Name }}-postgres-rw/kadi"{{- else }}{{ .Values.database.connectionString | quote }}{{- end }}
     STORAGE_PATH = "/opt/kadi/storage"
     MISC_UPLOADS_PATH = "/opt/kadi/uploads"
     SMTP_HOST = "localhost"
     SMTP_PORT = 25
     SMTP_USERNAME = ""
     SMTP_PASSWORD = ""
-    ELASTICSEARCH_HOSTS = {{ if .Values.elasticsearch.internal }}"http://{{ .Release.Name }}-elasticsearch:9200"{{- else }}{{ .Values.elasticsearch.connectionString }}{{- end }}
+    ELASTICSEARCH_HOSTS = {{ if .Values.elasticsearch.internal }}"http://{{ .Release.Name }}-elasticsearch:9200"{{- else }}{{ .Values.elasticsearch.connectionString | quote }}{{- end }}
     RATELIMIT_STORAGE_URI = "redis://{{ .Release.Name }}-redis:6379/0"
     CELERY_BROKER_URL = "redis://{{ .Release.Name }}-redis:6379/0"
