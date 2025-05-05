@@ -4,9 +4,10 @@ metadata:
   name: "{{ .Release.Name }}-configmap"
 data:
   kadi.py: |
+    import os
     AUTH_PROVIDERS = [{"type": "local"}]
     SERVER_NAME = {{ .Values.hostname | quote }}
-    SECRET_KEY = "kadi"
+    SECRET_KEY = os.getenv("KADI_SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = {{ if .Values.database.internal }}"postgresql://{{ .Values.database.internalDBSettings.username }}:{{ .Values.database.internalDBSettings.password }}@{{ .Release.Name }}-postgres-rw/kadi"{{- else }}{{ .Values.database.connectionString | quote }}{{- end }}
     STORAGE_PATH = "/opt/kadi/storage"
     MISC_UPLOADS_PATH = "/opt/kadi/uploads"
