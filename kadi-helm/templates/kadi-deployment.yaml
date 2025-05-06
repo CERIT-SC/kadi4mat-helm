@@ -33,7 +33,7 @@ spec:
             - name: KADI_SECRET_KEY
               valueFrom:
                 secretKeyRef:
-                  name: {{ if empty .Values.kadiSecretKey.customSecretName }}"{{ .Release.Name }}-secret-key"{{- else }}{{ .Values.kadiSecretKey.customSecretName }}{{- end }}
+                  name: {{ if empty .Values.kadiSettings.customSecretName }}"{{ .Release.Name }}-secret-key"{{- else }}{{ .Values.kadiSettings.customSecretName }}{{- end }}
                   key: secretKey
           ports:
             - containerPort: 8080

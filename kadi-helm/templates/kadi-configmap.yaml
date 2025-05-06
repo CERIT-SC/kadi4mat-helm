@@ -5,7 +5,7 @@ metadata:
 data:
   kadi.py: |
     import os
-    AUTH_PROVIDERS = [{"type": "local"}]
+    AUTH_PROVIDERS = {{ if empty .Values.kadiSettings.customAuthProviders }}[{"type": "local"}]{{- else }}{{ .Values.kadiSettings.customAuthProviders }}{{- end }}
     SERVER_NAME = {{ .Values.hostname | quote }}
     SECRET_KEY = os.getenv("KADI_SECRET_KEY")
     SQLALCHEMY_DATABASE_URI = {{ if .Values.database.internal }}"postgresql://{{ .Values.database.internalDBSettings.username }}:{{ .Values.database.internalDBSettings.password }}@{{ .Release.Name }}-postgres-rw/kadi"{{- else }}{{ .Values.database.connectionString | quote }}{{- end }}
@@ -18,3 +18,4 @@ data:
     ELASTICSEARCH_HOSTS = {{ if .Values.elasticsearch.internal }}"http://{{ .Release.Name }}-elasticsearch:9200"{{- else }}{{ .Values.elasticsearch.connectionString | quote }}{{- end }}
     RATELIMIT_STORAGE_URI = {{ if .Values.redis.internal }}"redis://{{ .Release.Name }}-redis:6379/0"{{- else }}{{ .Values.redis.connectionString | quote }}{{- end }}
     CELERY_BROKER_URL = {{ if .Values.redis.internal }}"redis://{{ .Release.Name }}-redis:6379/0"{{- else }}{{ .Values.redis.connectionString | quote }}{{- end }}
+    {{ .Values.additionalKadiSettings }}
